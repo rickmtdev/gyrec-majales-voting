@@ -2,7 +2,7 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="src/chart.css">
-        <title>Majáles naruby</title>
+        <title>Majáles 2023</title>
     </head>
     <body>
         <div class="chart">

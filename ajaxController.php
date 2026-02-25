@@ -2,7 +2,7 @@
 $con = mysqli_connect("[redacted]", "[redacted]", "[redacted]","[redacted]")
 or die(json_encode(array("text"=>"connect-fail")));
 
-if(file_get_contents("end_voting.txt") == 1 || true) {
+if(file_get_contents("end_voting.txt") == 1) {
     echo json_encode(array("text"=>"voting-locked"));
     exit;
 }
@@ -14,7 +14,9 @@ if(($_POST["choice1"] <= 6 && $_POST["choice1"] > 0) || ($_POST["choice2"] <= 12
 
     // Prevent potential double votes by restricting each choice to a range of classes
     if($_POST["choice1"] != null && ($_POST["choice1"] <= 6 && $_POST["choice1"] > 0)) {
-        $sql = "INSERT INTO majales_votes (class, date, agent, ip)
+        $_POST["choice1"] = intval($_POST["choice1"]); // Prevent SQL injection
+
+        $sql = "INSERT INTO majales23_votes (class, date, agent, ip)
         VALUES ({$_POST["choice1"]}, '{$date}', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['REMOTE_ADDR']}');";
         $result = mysqli_query($con, $sql);
         $lastId = mysqli_insert_id($con);
@@ -23,7 +25,9 @@ if(($_POST["choice1"] <= 6 && $_POST["choice1"] > 0) || ($_POST["choice2"] <= 12
     }
 
     if($_POST["choice2"] != null && ($_POST["choice2"] <= 12 && $_POST["choice2"] > 6)) {
-        $sql = "INSERT INTO majales_votes (class, date, agent, ip, vote_id)
+        $_POST["choice2"] = intval($_POST["choice2"]); // Prevent SQL injection
+
+        $sql = "INSERT INTO majales23_votes (class, date, agent, ip, vote_id)
         VALUES ({$_POST["choice2"]}, '{$date}', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['REMOTE_ADDR']}', {$lastId});";
         $result = mysqli_query($con, $sql);
     }

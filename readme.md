@@ -1,5 +1,5 @@
 # General info
-This is the original voting system code for the 2022 Majáles (Majáles naruby), written in late April 2022.
+This is the updated voting system code for the 2023 Majáles, based on the original 2022 code. Minimal changes were made to the code and the code commentary below is still valid.
 
 ## Redactions
 Some strings had to be redacted due to containing sensitive information. No other changes were made.

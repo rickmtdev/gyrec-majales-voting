@@ -23,7 +23,7 @@ function submitData() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "ajaxController.php", true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.timeout = 5000;
+    xhr.timeout = 3000;
 
     xhr.onreadystatechange = function () {
         if (this.readyState != 4){

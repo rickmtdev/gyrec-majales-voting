@@ -44,11 +44,16 @@ function displayData() {
             var classNum = bar.getAttribute("data-class");
 
             var newHeight = Math.round((votes[classNum-1] / highestVote) * 100, 1);
-            var currentHeight = (bar.style.height).replace("%", "");
+            // var currentHeight = (bar.style.height).replace("%", "");
             if(newHeight != (bar.style.height).replace("%", "")) {
                 // I wrote this at 1:27 AM. I tried to refrain from using jQuery, but I wanted an easy-to-implement height change animation.
                 //$(bar).animate({height: newHeight + "%"},10,"linear");
-                bar.style.height = (votes[classNum-1] / highestVote) * 100 + "%";
+
+                if(highestVote == 0) {
+                    bar.style.height = "0%";
+                } else {
+                    bar.style.height = (votes[classNum-1] / highestVote) * 100 + "%";
+                }
             }
         });
 

@@ -1,5 +1,6 @@
 <?php
-
+// Password 1: [redacted]
+// Password 2 (admin): [redacted]
 if(isset($_POST["pass"])) {
     if(hash('sha256', $_POST["pass"] . "[redacted]") == "[redacted]") {
         setcookie("auth", "[redacted]", time() + (10 * 365 * 24 * 3600), "/");
@@ -17,7 +18,7 @@ if(isset($_POST["pass"])) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-        <title>Majáles naruby</title>
+        <title>Majáles 2023</title>
         <link rel="stylesheet" href="src/main.css">
     </head>
     <body>

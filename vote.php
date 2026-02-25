@@ -3,7 +3,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <link rel="stylesheet" href="src/main.css">
-        <title>Majáles naruby</title>
+        <title>Majáles 2023</title>
     </head>
     <body>
         <div class="container">
@@ -45,7 +45,7 @@
         </div>
 
         <div class="message nocon" id="nocon">
-            <div>❌Problémy s připojením</div>
+            <div>❌Problémy s připojením, zkus to znovu</div>
         </div>
 
         <div class="message locked" id="locked">

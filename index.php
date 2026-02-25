@@ -1,5 +1,6 @@
 <?php
-
+// Password 1: [redacted]
+// Password 2 (admin): [redacted]
 if(isset($_POST["pass"])) {
     if(hash('sha256', $_POST["pass"] . "[redacted]") == "[redacted]") {
         setcookie("auth", "[redacted]", time() + (10 * 365 * 24 * 3600), "/");
@@ -17,7 +18,7 @@ if(isset($_POST["pass"])) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-        <title>Majáles naruby</title>
+        <title>Majáles 2023</title>
         <link rel="stylesheet" href="src/main.css">
     </head>
     <body>
@@ -36,9 +37,7 @@ if(isset($_POST["pass"])) {
                 setTimeout(() => {
                     pckImg.remove();
                 }, "2200");
-
-                document.getElementById("gut").style.display = "block";
-            }
+            } 
         </script>
         <style>
             body {
@@ -175,8 +174,7 @@ if(isset($_POST["pass"])) {
             <a href="chart.php" class="link">Živý graf</a>
 
             <br>
-            <p>Stránky jsou určeny pro horizontální zobrazení na PC.<br><a onclick="playAudio('sounds/jezismarja_to_snad_neni_mozny.mp3')" href="#">Hlasování</a> i graf <a onclick="playAudio('sounds/tak_to_je_v_prdeli.mp3')" href="#">pochopitelně</a> <a onclick="playAudio('sounds/ryby_v_prdeli.mp3')" href="#">jednoznačně</a> vyžadují <a onclick="playAudio('sounds/ja_snad_sezeru_tu_kridu.mp3')" href="#">připojení</a> k <a onclick="playAudio('sounds/nemyslim_to_vubec_rasisticky.mp3')" href="#">internetu</a>.</p>
+            <p>Stránka s grafem je přizpůsobena pro zobrazení na 16:9 <a onclick="playAudio('sounds/ryby_v_prdeli.mp3')" href="#">viewportu</a>.<br>Hlasování i graf vyžadují připojení k internetu.</p>
         </div>
-        <div id="gut"><a onclick="playAudio('sounds/skrek_propast.mp3')" href="#">gut</a></div>
     </body>
 </html>
