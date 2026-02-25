@@ -1,0 +1,150 @@
+* {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.voting * {
+    overflow-y: hidden;
+    user-select: none;
+}
+
+body {
+    font-family: Tahoma;
+    height: 100%;
+    background: black;
+    color: rgb(230,230,230);
+}
+
+.container {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.button-grid {
+    width: 98%;
+    height: 19%;
+    display: flex;
+    padding: 0;
+    transform: translateX(-50%);
+    left: 50%;
+    padding-bottom: 0.4%;
+} 
+
+.button, .button-vote {
+    width: 33.33%;
+    height: 100%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    background: rgb(60,60,60);
+    color: rgb(220,220,220);
+    font-size: 40%;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.button:hover {
+    background: rgb(120,120,120);
+}
+
+.button p, .button-vote p {
+    transform: translateY(-50%);
+    top: 50%;
+    text-align: center;
+}
+
+.button-vote {
+    width: 100%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    background: rgb(0,60,0);
+    color: rgb(90,90,90);
+    font-size: 40%;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.button-vote.allowed {
+    background: rgb(0,150,0);
+    color: white;
+}
+
+.button-vote.allowed:hover {
+    background: rgb(11, 219, 11);
+}
+
+.button-selected, .button-selected:hover {
+    background: rgb(60,60,200);
+}
+
+.button-hidden, .button-hidden:hover {
+    background: rgb(50,50,50);
+    color: rgb(100,100,100);
+    filter: blur(0.1rem);
+}
+
+.message {
+    width: 100%;
+    height: 100%;
+    font-size: 90%;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.message.success {
+    background: lime;
+    color: black;
+}
+
+.message.failure, .message.nocon {
+    background: rgb(255,120,120);
+    color: black;
+}
+
+.message.locked {
+    background: rgb(255, 199, 79);
+    color: black;
+}
+
+.message.prevent-clicks {
+    pointer-events: auto;
+    z-index: 1000;
+}
+
+.message.success div, .message.failure div, .message.locked div, .message.nocon div {
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.message-show {
+    pointer-events: auto;
+    opacity: 0.8;
+}
+
+@media (max-width: 1000px) {
+    .button, .button-vote {
+        cursor: auto;
+        border-radius: 1rem;
+        font-size: 80%;
+    }
+
+    .button-hidden, .button-hidden:hover {
+        filter: blur(0.08rem);
+        background: rgb(40,40,40);
+    }
+
+
+  }

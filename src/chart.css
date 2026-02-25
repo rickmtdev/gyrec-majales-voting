@@ -1,0 +1,126 @@
+* {
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+body {
+    height: 100vh;
+    font-family: Tahoma;
+}
+
+.chart {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.chart-area {
+    /* width: 96%; */
+    height: 83.5vh;
+    padding-top: 2vh;
+    /* background: rgb(240,240,240); */ 
+    padding-left: 2%;
+    padding-right: 2%;
+    display: flex;
+    box-sizing: content-box;
+    border-bottom: 0.5vh solid lightgrey;
+}
+
+.chart-area .bar {
+    width: 8%;
+    height: 0%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    align-self: flex-end;
+    transition: 2s;
+}
+
+.chart-area .bar.blue {
+    background: linear-gradient(to top, rgb(150,150,255),rgb(80,80,255));
+}
+
+.chart-area .bar.orange {
+    background: linear-gradient(to top, rgb(255, 180, 100),rgb(255, 131, 73));
+}
+
+
+.chart-desc {
+    height: 8vh;
+    text-align: center;
+    width: 96%;
+    /* background: rgb(240,240,240); */
+    padding-left: 2%;
+    padding-right: 2%;
+    display: flex;
+}
+
+.desc-text {
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 6vh;
+}
+
+.chart-desc p {
+    width: 100%;
+    white-space: nowrap;
+    display: inline;
+    overflow: hidden;
+    width: fit-content;
+}
+
+.chart-desc .desc-bar {
+    height: 100%;
+    width: 8%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    align-self: flex-end;
+}
+
+.desc-text.count {
+    padding: 0;
+    margin: 0;
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    display: none;
+    border-top: 0.4vh dashed grey;
+    border-bottom: 0.4vh dashed grey;
+}
+
+#timer {
+    display: none;
+    position: absolute;
+    bottom: 0vh;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1.5vh;
+    background: rgba(80,255,80,0.4);
+    border: 0.3vh solid grey;
+    border-radius: 1vh;
+    font-size: 5vh;
+    height: 6vh;
+    width: fit-content;
+    overflow: hidden;
+    font-weight: bold;
+    box-sizing: content-box;
+    z-index: -1;
+}
+
+#timer.low {
+    background: rgb(255, 180, 100);
+}
+
+#timer.low-lower {
+    background: rgb(255, 124, 124);
+}
+
+#colon {
+    transition: 0.1s;
+}
+
+#end {
+    display: none;
+    text-transform: uppercase;
+}
