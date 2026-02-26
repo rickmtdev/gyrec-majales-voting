@@ -5,9 +5,9 @@ This is a slightly refactored version of the voting system used on Majáles 2022
 
 <div style="display:flex; flex-wrap: wrap; gap: 10px;">
 
-<img src="src/md/vote.png" alt="vote" style="height:200px; width:auto;">
-<img src="src/md/admin.png" alt="admin" style="height:200px; width:auto;">
-<img src="src/md/chart.png" alt="chart" style="height:200px; width:auto;">
+<img src="src/md/vote.png" alt="vote" style="width:100px; height:auto;">
+<img src="src/md/admin.png" alt="admin" style="width:200px; height:auto;">
+<img src="src/md/chart.png" alt="chart" style="width:250px; height:auto;">
 
 </div>
 
@@ -24,7 +24,7 @@ Minimal setup process:
 - Read the usage manual and get used to the UI
 
 ## PHP configuration script
-The script allows you to set up config such as the user and admin passwords and DB login credentials. It also contains some reusable logic and creates the table used for storing the votes, if it does not exist.
+The script allows you to set up config such as the user and admin passwords and DB login credentials.
 
 ## Access control
 All PHP scripts redirect to the login page if the user is not authorized. This does not apply to non-PHP assets.

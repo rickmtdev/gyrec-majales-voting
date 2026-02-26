@@ -2,10 +2,10 @@
 // Main PHP script component
 // This script is included in all PHP scripts.
 
-// Uncomment to show PHP errors for debugging if disabled
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
+// // Uncomment to show PHP errors for debugging if disabled
+// ini_set('display_errors', '1');
+// ini_set('display_startup_errors', '1');
+// error_reporting(E_ALL);
 
 // Import setup constants
 if (file_exists(__DIR__ . '/env.local.php')) {
