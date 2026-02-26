@@ -48,6 +48,10 @@ require __DIR__ . '/main.php';
             <div>❌Došlo k chybě, zkus to znovu</div>
         </div>
 
+        <div class="message rate" id="rate">
+            <div>❌Před odesláním chvíli počkej</div>
+        </div>
+
         <div class="message nocon" id="nocon">
             <div>❌Problémy s připojením, zkus to znovu</div>
         </div>

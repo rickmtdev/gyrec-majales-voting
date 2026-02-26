@@ -8,6 +8,32 @@ if(getConfig($pdo)['end_voting'] == true) {
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
+if(VOTING_RATE_LIMIT_SECONDS != null) {
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $since = date('Y-m-d H:i:s', time() - VOTING_RATE_LIMIT_SECONDS);
+
+    $sqlRateLimit = "
+    SELECT COUNT(*) AS recent_votes
+    FROM `" . SQL_TABLE . "`
+    WHERE ip = :ip
+    AND removed IS NULL
+    AND date >= :since
+    ";
+
+    $stmt = $pdo->prepare($sqlRateLimit);
+    $stmt->execute([
+        ':ip'    => $ip,
+        ':since' => $since,
+    ]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result['recent_votes'] > 0) {
+        echo json_encode(["text" => "rate-limit"]);
+        exit;
+    }
+}
+
 if(isset($_POST["choice1"]) && isset($_POST["choice2"]) && is_int($_POST["choice1"]) && is_int($_POST["choice2"]) &&
     (($_POST["choice1"] <= 6 && $_POST["choice1"] > 0) || ($_POST["choice2"] <= 12 && $_POST["choice2"] > 6))) {
     $date = date('Y-m-d H:i:s');

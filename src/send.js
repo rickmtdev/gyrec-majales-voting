@@ -64,7 +64,12 @@ function submitData(retryCount = 0) {
             document.getElementById("locked").classList.add("message-show");
             setTimeout(() => {
                 document.getElementById("locked").classList.remove("message-show");
-            }, 1000);            
+            }, 1000);    
+        } else if(response.text == "rate-limit") {
+            document.getElementById("rate").classList.add("message-show");
+            setTimeout(() => {
+                document.getElementById("rate").classList.remove("message-show");
+            }, 1000);
         } else {
             document.getElementById("fail").classList.add("message-show");
             setTimeout(() => {

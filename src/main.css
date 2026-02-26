@@ -110,7 +110,7 @@ body {
     color: black;
 }
 
-.message.failure, .message.nocon {
+.message.failure, .message.nocon, .message.rate {
     background: rgb(255,120,120);
     color: black;
 }
@@ -125,7 +125,7 @@ body {
     z-index: 1000;
 }
 
-.message.success div, .message.failure div, .message.locked div, .message.nocon div {
+.message.success div, .message.failure div, .message.rate div, .message.locked div, .message.nocon div {
     text-align: center;
     top: 50%;
     transform: translateY(-50%);

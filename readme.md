@@ -1,6 +1,16 @@
 # Majáles voting system: hlasovací systém pro Majáles Gymnázia Brno-Řečkovice
 This is a slightly refactored version of the voting system used on Majáles 2022 and 2023 of Gymnázium Brno-Řečkovice.
 
+[Online demo](https://lan.rickmt.com:4000/pub/majales/) (user: `userpassword`, admin: `adminpassword`; voting rate limiting is set)
+
+<div style="display:flex; flex-wrap: wrap; gap: 10px;">
+
+<img src="src/md/vote.png" alt="vote" style="width:200px; height:auto;">
+<img src="src/md/chart.png" alt="chart" style="width:200px; height:auto;">
+<img src="src/md/admin.png" alt="admin" style="width:200px; height:auto;">
+
+</div>
+
 Specific people are assigned the role of a vote collector to collect votes from the event attendees. Two votes can be submitted at most; one in each category (lower and higher grades). See below for a detailed use case description.
 
 Add a feature request if you wish the voting system to work for your use case, if it differs.
@@ -13,7 +23,7 @@ Minimal setup process:
 - Adjust the configuration in `env.php` (or create a copy named `env.local.php`)
 - Read the usage manual and get used to the UI
 
-## PHP setup script
+## PHP configuration script
 The script allows you to set up config such as the user and admin passwords and DB login credentials. It also contains some reusable logic and creates the table used for storing the votes, if it does not exist.
 
 ## Access control
@@ -22,6 +32,8 @@ All PHP scripts redirect to the login page if the user is not authorized. This d
 If desired, set up rules in your `.htaccess` script for all assets in the repository except `login.php` to redirect to `login.php` if the user cookie (`USER_COOKIE_NAME`) does not contain the expected password hash.
 
 # Usage / voting procedure
+Description of the system use case.
+
 ## General procedure
 Once the voting starts on the Majáles event, the moderators may decide to show the live chart on the big screen. If the voting is disabled in the admin interface, a moderator enables it.
 
