@@ -1,24 +1,12 @@
 <?php
-// Password 1: [redacted]
-// Password 2 (admin): [redacted]
-if(isset($_POST["pass"])) {
-    if(hash('sha256', $_POST["pass"] . "[redacted]") == "[redacted]") {
-        setcookie("auth", "[redacted]", time() + (10 * 365 * 24 * 3600), "/");
-        header("location: index.php");
-    } else {
-        $wrong = true;
-    }
- }
-
-
-
-
+$static = true;
+require __DIR__ . '/main.php';
 ?>
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-        <title>Majáles 2023</title>
+        <title><?= PAGE_TITLE ?></title>
         <link rel="stylesheet" href="src/main.css">
     </head>
     <body>

@@ -1,9 +1,8 @@
 <?php
-ob_start();
-if($_COOKIE["admin_auth"] == "[redacted]") {
-    $con = mysqli_connect("[redacted]", "[redacted]", "[redacted]","[redacted]")
-    or die(json_encode(array("text"=>"connect-fail")));
+require __DIR__ . '/main.php';
 
+ob_start();
+if(isLogin($_COOKIE[ADMIN_COOKIE_NAME], true, true)) {
     $sql = "select count(*) as total,
     count(if(class = 1 ,1,null)) as class_1,
     count(if(class = 2 ,1,null)) as class_2,
@@ -17,12 +16,12 @@ if($_COOKIE["admin_auth"] == "[redacted]") {
     count(if(class = 10 ,1,null)) as class_10,
     count(if(class = 11 ,1,null)) as class_11,
     count(if(class = 12 ,1,null)) as class_12
-    from majales23_votes where removed IS NULL;";
+    from ". SQL_TABLE ." where removed IS NULL;";
     $result = mysqli_query($con, $sql);
     $array = mysqli_fetch_assoc($result);
 
     $sql = "select
-    count(*) from majales23_votes where vote_id IS NULL and removed IS NULL;";
+    count(*) from ". SQL_TABLE ." where vote_id IS NULL and removed IS NULL;";
     $result = mysqli_query($con, $sql);
     $arrayUnique = mysqli_fetch_assoc($result);
     //$display = file_get_contents("counter.txt");
@@ -30,16 +29,16 @@ if($_COOKIE["admin_auth"] == "[redacted]") {
 
     //echo json_encode($array);
 
-    $display = file_get_contents("counter.txt");
-    $endVoting = file_get_contents("end_voting.txt");
-    $date = file_get_contents("timer.txt");
+    $display = file_get_contents("config/counter.txt");
+    $endVoting = file_get_contents("config/end_voting.txt");
+    $date = file_get_contents("config/timer.txt");
     if(isset($_POST["counts"])) {
         if($display == 0) {
             $value = 1;
         } else {
             $value = 0;
         }
-        $fp = fopen('counter.txt', 'w');
+        $fp = fopen('config/counter.txt', 'w');
         fwrite($fp, $value);
         fclose($fp);
         header("location: admin.php#input");
@@ -49,7 +48,7 @@ if($_COOKIE["admin_auth"] == "[redacted]") {
         } else {
             $value = 0;
         }
-        $fp = fopen('end_voting.txt', 'w');
+        $fp = fopen('config/end_voting.txt', 'w');
         fwrite($fp, $value);
         fclose($fp);
         header("location: admin.php#input");
@@ -65,12 +64,12 @@ if($_COOKIE["admin_auth"] == "[redacted]") {
         }
 
         $value = $newDate;
-        $fp = fopen('timer.txt', 'w');
+        $fp = fopen('config/timer.txt', 'w');
         fwrite($fp, $value);
         fclose($fp);
         header("location: admin.php#input");
     } elseif(isset($_POST["deleteall"])) {
-        $sqlDel = "update majales23_votes set removed = 1;";
+        $sqlDel = "update ". SQL_TABLE ." set removed = 1;";
         $resultDel = mysqli_query($con, $sqlDel);
         header("location: admin.php#open-delete-all");
     }
@@ -80,22 +79,27 @@ if($_COOKIE["admin_auth"] == "[redacted]") {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-        <title>Majáles 2023</title>
+        <title><?= PAGE_TITLE ?></title>
         <link rel="stylesheet" href="src/main.css">
     </head>
     <body>
 <?php
 }
 
-if($_COOKIE["admin_auth"] != "[redacted]") {
+$unauth = false;
+
+if(!isLogin($_COOKIE[ADMIN_COOKIE_NAME], true, true)) {
     ob_end_clean();
-    if(hash('sha256', $_POST["pass"] . "[redacted]") == "[redacted]") {
-        setcookie("admin_auth", "[redacted]", time() + (10 * 365 * 24 * 3600), "/");
+    $wrong = false;
+
+    if(isset($_POST["pass"]) && isLogin($_POST["pass"], true)) {
+        setLogin(true);
         header("location: admin.php");
+        exit;
     } elseif(isset($_POST["pass"])) {
         $wrong = true;
     }
-    echo '<head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" /> <title>Majáles 2023</title> <link rel="stylesheet" href="src/main.css"> </head>';
+    echo '<head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" /> <title>'. PAGE_TITLE .'</title> <link rel="stylesheet" href="src/main.css"> </head>';
     echo '<h3>Admin rozhraní</h3><br>';
     if($wrong) { echo "<div class='wrong-pass'>nesprávné heslo</div>"; }
     echo '<form method="post"> <input type="password" placeholder="Heslo" name="pass"> <input type="submit" value="Přihlásit se"> </form>';
@@ -209,7 +213,7 @@ if($unauth) {
 }
 
 $i = 1;
-echo "<h3>Admin rozhraní nebo něco</h3><br>";
+echo "<h3>Admin rozhraní</h3><br>";
 echo "<div class='total'><b>Celkem hlasů: " . $array["total"] . "</b><br>Unikátních hlasů: ". implode($arrayUnique) ."<br><p>[". date('d. m. \'y H:i:s') ."]</p></div>";
 unset($array["total"]);
 $category1 = array_slice($array, 0, 6);

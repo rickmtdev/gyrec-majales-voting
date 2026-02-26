@@ -1,39 +1,84 @@
-# General info
-This is the updated voting system code for the 2023 Majáles, based on the original 2022 code. Minimal changes were made to the code and the code commentary below is still valid.
+# Majáles voting system: hlasovací systém pro Majáles Gymnázia Brno-Řečkovice
+This is a slightly refactored version of the voting system used on Majáles 2022 and 2023 of Gymnázium Brno-Řečkovice.
 
-## Redactions
-Some strings had to be redacted due to containing sensitive information. No other changes were made.
+Specific people are assigned the role of a vote collector to collect votes from the event attendees. Two votes can be submitted at most; one in each category (lower and higher grades). See below for a detailed use case description.
 
-# Code commentary
-My apologies to whoever decides to go through the code.
+Add a feature request if you wish the voting system to work for your use case, if it differs.
 
-## General warcrimes commited
-I decided not to use any frameworks since the app is relatively small. It should be noted that prior to me diving into coding PHP apps in Symfony, the majority of my PHP scripts were complete spaghetti code, full of whatever's the opposite of best practices.
+# Setup
+The app is relatively simple and can be run on any PHP7+/MySQL web server/hosting.
 
-You should take this and the fact that this code was written in a bit of a hurry into consideration when looking through it.
+Minimal setup process:
+- Clone the repository into your web server directory
+- Adjust the configuration in `setup.php`
+- If needed, adjust the permissions of the `config` directory so that the web server user can read and write into it
+- Read the usage manual and get used to the UI
 
-## Database querying
-First and foremost, no, I did not know PDO is a thing. Secondly, I have no idea why I had to write the SQL connect part in every single script, instead of using includes. Other logic (such as the individual vote counts query) would have benefited from that as well.
+## PHP setup script
+The script allows you to set up config such as the user and admin passwords and DB login credentials. It also contains some reusable logic and creates the table used for storing the votes, if it does not exist.
 
-SQL injection: notice the insert in `ajaxController.php`. No validation whether the choice param is a number is done; in fact, the comparisons in the if-clause would return true for a string starting with a number (ie "1 ... [sql prompt]").
+## Access control
+All PHP scripts redirect to the login page if the user is not authorized. This does not apply to non-PHP assets.
 
-## Other PHP stuff
-Some logic was written with disregard to access control, such as the `admin.php` code. After a realization was made, output buffering was used instead of restructuring the code to prevent access to restricted parts of the code. Yes, the query runs on every script execution, regardless of the login.
+If desired, set up rules in your `.htaccess` script for all assets in the repository except `login.php` to redirect to `login.php` if the user cookie (`USER_COOKIE_NAME`) does not contain the expected password hash.
 
-`ajaxVoter` would probably be a more suitable name for the `ajaxController.php` script. Considering my shallow framework experience back then, you can see where I got the `controller` part from.
+# Usage / voting procedure
+## General procedure
+Once the voting starts on the Majáles event, the moderators may decide to show the live chart on the big screen. If the voting is disabled in the admin interface, a moderator enables it.
 
-There is no reason for `vote.php` and `chart.php` to have the PHP extension.
+Several people (users) are assigned the role of a vote collector and are stationed around the area of the Majáles event. Attendees come to these collectors and tell them their chosen vote. The collector enters the vote into the UI and submits it. Attendees may be marked (ie by a stamp on the wrist) to show that they have already voted.
 
-App config (chart timer, chart counts toggle, voting lock) could probably have been implemented using a single-row SQL table, albeit having a config file that is being read/written to would also be viable. I have no idea why I decided to instead have one file per each setting. Even better to have them in the same directory as all the scripts.
+The voting is split into two categories: lower (pri, sek, ter) and higher (kva, kvi, sex) grades. A vote in each category can be submitted. Voting in both categories submits a single vote for each chosen grade. Voting in a single category submits one vote for the chosen grade.
 
-## JS code
-No generative AI was used when writing the code. GPT-3 was already out by then, but I did not find out until July 2022. I do not write much JS code and lately I've been lazily using Copilot for the majority of any JS-related stuff, so all I can say about the code is that at a first glance, it looks pretty okay, at least when compared to the BE.
+Once the voting time slot has ended, a moderator may disable voting in the admin interface. No votes can be submitted and the chart may be displayed on the big screen, showing the final results.
 
-I should note that although jQuery was originally included in the HTML, the final code is vanilla JS.
+## App UI usage
+All users (vote collectors, moderators) are given the password (`USER_PASSWORD`) to log into the app.
 
-## HTML, CSS
-The way the chart is designed for responsiveness felt sketchy even back then - it was made to be viewable on landscape fullscreen viewports with no other setups in mind. The way the JS is set up to keep the font in certain elements about the same size regardless of page zoom is also somewhat sus.
+The collectors will be using the *Hlasování* page to submit votes. The live result chart is displayed on the *Živý graf* page; it fetches results periodically.
 
-The `echo`-ed HTML in `admin.php` is atrocious.
+### Admin interface
+The admin interface can be accessed through *Admin. rozhraní a výsledky*. It is to be accessed by moderators only using their password (`ADMIN_PASSWORD`).
 
-The HTML structure in other scripts seems fine.
+The interface shows a sorted summary of the voting results, either as a whole or grouped by grade category. Since these results are only meant to be read once the voting had ended, they do not refresh automatically (unlike the live chart).
+
+A moderator may enable or disable voting, or change the display of the live chart (show/hide vote counts, show a countdown). Changing these settings does not require the live chart page to be reloaded manually.
+
+If any votes were submitted during testing, they can be removed. These votes are only marked as removed, in case their removal was not intentional.
+
+# Testing
+The system had been previously used on Majáles 2022 and 2023. No significant issues or flaws were observed.
+
+Observed minor issues:
+- The live chart does not visually update, if the window is minimized (ie when capturing it using OBS and outputting it to the big screen) - should not be an issue if simply showing the entire screen.
+- The vote submission page occasionally shows an error, the votes submit on the 2nd attempt: probably fixed by adding retry logic to the submission JS.
+
+## Testing prior to the event
+You should definitely test the system prior to the event. Ideally on multiple devices, test the following:
+- Both the user and admin logins work
+- The voting submission works (try submitting votes for a single category and both categories)
+- The live chart updates accordingly
+- The voting can be disabled and the chart display can be changed in the admin interface
+- After the testing is finished, the test votes are successfully removed using the admin interface
+
+# Different usage of the voting system
+While the voting system is tailored to the use case described above, you are obviously free to modify it as you wish. Described below are slightly different use cases that the system could be adapted for relatively easily.
+
+If you wish, you can submit a feature request which I will be more than happy to implement if it is not too complex.
+
+## Voting without vote collectors
+The event attendees open the voting system directly and vote themselves.
+
+Both `ajaxVoter.php` and `vote.php` must be accessible without user login (ie add `$nonauth = true;` before the include). The attendee is given a link to the latter.
+
+To prevent the submission of multiple votes from one attendee, you could pre-generate a set of one-use credentials (eg hashes, random numbers) and store them in an SQL table. These credentials would be submitted to the voting page using a GET parameter; you could pre-generate voting tickets (with QR codes) which would then be printed and given to each attendee on entry. One way to do this is using a tool such as *dompdf* or simply generating the tickets as pictures, which would then be printed.
+
+## Voting not limited to one vote per category
+The attendee can give at most 2 votes to any grade.
+
+Adjust the vote submission logic in `send.js` and `ajaxVoter.php` (ie the if-clauses) to not restrict each vote to their respective grade category.
+
+# About the code
+This app was written back in 2022 in a relative hurry with no intentions to publish it. The code is a mess and I am well aware of it.
+
+To read a more thorough explanation as to why it's in this state (or to see an explanation of the warcrimes commited here), see the `readme.md` and the code in the `old` branch, containing the original code prior to refactor.

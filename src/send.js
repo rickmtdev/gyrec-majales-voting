@@ -1,3 +1,7 @@
+// Vote submission script
+
+const errorRetries = 2; // Retries upon XHR error
+
 document.body.setScaledFont = function() {
     var f = 0.35, s = this.offsetWidth, fs = s * f;
     this.style.fontSize = fs + '%';
@@ -16,12 +20,12 @@ function sleep(ms) {
 var choice1 = null;
 var choice2 = null;
 
-function submitData() {
+function submitData(retryCount = 0) {
     
     document.getElementById("noclicks").classList.add("prevent-clicks");
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "ajaxController.php", true);
+    xhr.open("POST", "ajaxVoter.php", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.timeout = 3000;
 
@@ -70,11 +74,18 @@ function submitData() {
     };
 
     xhr.onerror = function() {
-        noConError();
-    }
+        if (retryCount < errorRetries) {
+            console.log("XHR attempt ", retryCount + 1);
+            submitData(retryCount + 1);
+        } else {
+            noConError();
+        }
+    };
     xhr.ontimeout = function() {
         noConError();
     }
+
+    xhr.timeout = 5000;
 
     function noConError() {
         document.getElementById("nocon").classList.add("message-show");
@@ -84,8 +95,8 @@ function submitData() {
     }
 
     var data = JSON.stringify({
-        "choice1": choice1,
-        "choice2": choice2
+        "choice1": Number(choice1),
+        "choice2": Number(choice2)
     });
 
     xhr.send(data);

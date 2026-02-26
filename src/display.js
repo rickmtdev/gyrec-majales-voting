@@ -1,9 +1,6 @@
-// document.body.setScaledFont = function() {
-//     var f = 0.35, s = this.offsetWidth, fs = s * f;
-//     this.style.fontSize = fs + '%';
-//     return this
-// }
-// document.body.setScaledFont();
+// Chart display script
+
+const timeoutMs = 2000; // Timeout between XHR requests
 
 var displayCounters = 0;
 var timerTime = "";
@@ -175,9 +172,19 @@ function displayData() {
             }
         }
 
-
+        setTimeout(displayData, timeoutMs);
 
     };
+
+    xhr.onerror = function() {
+        setTimeout(displayData, timeoutMs);
+    };
+
+    xhr.ontimeout = function() {
+        setTimeout(displayData, timeoutMs);
+    };
+
+    xhr.timeout = 10000;
 
     xhr.send();
 }
@@ -243,8 +250,5 @@ function resizeClasses() {
 
 
     displayData();
-    window.setInterval(function(){
-        displayData();
-    }, 2000);
 }());
 

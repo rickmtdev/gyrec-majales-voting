@@ -1,9 +1,13 @@
+<?php
+$static = true;
+require __DIR__ . '/main.php';
+?>
 <html class="voting">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <link rel="stylesheet" href="src/main.css">
-        <title>Majáles 2023</title>
+        <title><?= PAGE_TITLE ?></title>
     </head>
     <body>
         <div class="container">

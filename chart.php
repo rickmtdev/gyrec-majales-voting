@@ -1,8 +1,12 @@
+<?php
+$static = true;
+require __DIR__ . '/main.php';
+?>
 <html>
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="src/chart.css">
-        <title>Majáles 2023</title>
+        <title><?= PAGE_TITLE ?></title>
     </head>
     <body>
         <div class="chart">

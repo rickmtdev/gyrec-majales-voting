@@ -1,6 +1,5 @@
 <?php
-$con = mysqli_connect("[redacted]", "[redacted]", "[redacted]","[redacted]")
-or die(json_encode(array("text"=>"connect-fail")));
+require __DIR__ . '/main.php';
 
 $sql = "select count(*) as total,
 count(if(class = 1 ,1,null)) as class_1,
@@ -15,11 +14,11 @@ count(if(class = 9 ,1,null)) as class_9,
 count(if(class = 10 ,1,null)) as class_10,
 count(if(class = 11 ,1,null)) as class_11,
 count(if(class = 12 ,1,null)) as class_12
-from majales23_votes where removed IS NULL;";
+from ". SQL_TABLE ." where removed IS NULL;";
 $result = mysqli_query($con, $sql);
 $array = mysqli_fetch_assoc($result);
-$display = file_get_contents("counter.txt");
-$timer = file_get_contents("timer.txt");
+$display = file_get_contents("config/counter.txt");
+$timer = file_get_contents("config/timer.txt");
 $array["display_counter"] = $display;
 $array["timer"] = $timer;
 
