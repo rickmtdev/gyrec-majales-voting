@@ -6,7 +6,7 @@ This is a slightly refactored version of the voting system used on Majáles 2022
 <div style="display:flex; flex-wrap: wrap; gap: 10px;">
 
 <img src="src/md/vote.png" alt="vote" style="width:100px; height:auto;">
-<img src="src/md/admin.png" alt="admin" style="width:200px; height:auto;">
+<img src="src/md/admin.png" alt="admin" style="width:100px; height:auto;">
 <img src="src/md/chart.png" alt="chart" style="width:250px; height:auto;">
 
 </div>
