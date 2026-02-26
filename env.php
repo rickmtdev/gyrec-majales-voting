@@ -9,6 +9,7 @@ const SQL_DBNAME = "db";
 
 // SQL table setup
 const SQL_TABLE = "majales_votes";
+const SQL_CONFIG_TABLE = "majales_config";
 
 // User login credentials
 const USER_PASSWORD = "userpassword";

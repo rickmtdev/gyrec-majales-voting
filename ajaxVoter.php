@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/main.php';
 
-if(file_get_contents("config/end_voting.txt") == 1) {
+if(getConfig($pdo)['end_voting'] == true) {
     echo json_encode(array("text"=>"voting-locked"));
     exit;
 }
@@ -15,11 +15,23 @@ if(isset($_POST["choice1"]) && isset($_POST["choice2"]) && is_int($_POST["choice
     // Prevent potential double votes by restricting each choice to a range of classes
     if($_POST["choice1"] != null && ($_POST["choice1"] <= 6 && $_POST["choice1"] > 0)) {
         $_POST["choice1"] = intval($_POST["choice1"]); // Prevent SQL injection
+        
+        $sql = "
+        INSERT INTO `" . SQL_TABLE . "` 
+        (class, date, agent, ip)
+        VALUES (:class, :date, :agent, :ip)
+        ";
 
-        $sql = "INSERT INTO ". SQL_TABLE ." (class, date, agent, ip)
-        VALUES ({$_POST["choice1"]}, '{$date}', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['REMOTE_ADDR']}');";
-        $result = mysqli_query($con, $sql);
-        $lastId = mysqli_insert_id($con);
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute([
+            ':class' => (int) $_POST['choice1'],
+            ':date'  => $date,
+            ':agent' => $_SERVER['HTTP_USER_AGENT'],
+            ':ip'    => $_SERVER['REMOTE_ADDR'],
+        ]);
+
+        $lastId = $pdo->lastInsertId();
     } else {
         $lastId = "NULL";
     }
@@ -27,9 +39,21 @@ if(isset($_POST["choice1"]) && isset($_POST["choice2"]) && is_int($_POST["choice
     if($_POST["choice2"] != null && ($_POST["choice2"] <= 12 && $_POST["choice2"] > 6)) {
         $_POST["choice2"] = intval($_POST["choice2"]); // Prevent SQL injection
 
-        $sql = "INSERT INTO ". SQL_TABLE ." (class, date, agent, ip, vote_id)
-        VALUES ({$_POST["choice2"]}, '{$date}', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['REMOTE_ADDR']}', {$lastId});";
-        $result = mysqli_query($con, $sql);
+        $sql = "
+        INSERT INTO `" . SQL_TABLE . "` 
+        (class, date, agent, ip, vote_id)
+        VALUES (:class, :date, :agent, :ip, :vote_id)
+        ";
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute([
+            ':class'   => (int) $_POST['choice2'],
+            ':date'    => $date,
+            ':agent'   => $_SERVER['HTTP_USER_AGENT'],
+            ':ip'      => $_SERVER['REMOTE_ADDR'],
+            ':vote_id' => (int) $lastId,
+        ]);
     }
 
 

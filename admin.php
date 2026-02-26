@@ -3,75 +3,52 @@ require __DIR__ . '/main.php';
 
 ob_start();
 if(isLogin($_COOKIE[ADMIN_COOKIE_NAME], true, true)) {
-    $sql = "select count(*) as total,
-    count(if(class = 1 ,1,null)) as class_1,
-    count(if(class = 2 ,1,null)) as class_2,
-    count(if(class = 3 ,1,null)) as class_3,
-    count(if(class = 4 ,1,null)) as class_4,
-    count(if(class = 5 ,1,null)) as class_5,
-    count(if(class = 6 ,1,null)) as class_6,
-    count(if(class = 7 ,1,null)) as class_7,
-    count(if(class = 8 ,1,null)) as class_8,
-    count(if(class = 9 ,1,null)) as class_9,
-    count(if(class = 10 ,1,null)) as class_10,
-    count(if(class = 11 ,1,null)) as class_11,
-    count(if(class = 12 ,1,null)) as class_12
-    from ". SQL_TABLE ." where removed IS NULL;";
-    $result = mysqli_query($con, $sql);
-    $array = mysqli_fetch_assoc($result);
+    $array = getVotes($pdo);
 
-    $sql = "select
-    count(*) from ". SQL_TABLE ." where vote_id IS NULL and removed IS NULL;";
-    $result = mysqli_query($con, $sql);
-    $arrayUnique = mysqli_fetch_assoc($result);
-    //$display = file_get_contents("counter.txt");
-    //$array["display_counter"] = $display;
+    // Get unique votes
+    $sql = "
+    SELECT COUNT(*) AS total_unique
+    FROM `" . SQL_TABLE . "`
+    WHERE vote_id IS NULL 
+    AND removed IS NULL
+    ";
+    try {
+        $stmt = $pdo->query($sql);
+        $arrayUnique = $stmt->fetch();
+    } catch (PDOException $e) {
+        die(json_encode(["text" => "query-fail"]));
+    }
 
-    //echo json_encode($array);
+    $config = getConfig($pdo);
 
-    $display = file_get_contents("config/counter.txt");
-    $endVoting = file_get_contents("config/end_voting.txt");
-    $date = file_get_contents("config/timer.txt");
+    $display = $config['counter'];
+    $endVoting = $config['end_voting'];
+    $date = $config['timer'];
     if(isset($_POST["counts"])) {
-        if($display == 0) {
-            $value = 1;
-        } else {
-            $value = 0;
-        }
-        $fp = fopen('config/counter.txt', 'w');
-        fwrite($fp, $value);
-        fclose($fp);
+        setConfig($pdo, ['counter' => !$display]);
+        
         header("location: admin.php#input");
-    } elseif(isset($_POST["votes"])) {
-        if($endVoting == 0) {
-            $value = 1;
-        } else {
-            $value = 0;
-        }
-        $fp = fopen('config/end_voting.txt', 'w');
-        fwrite($fp, $value);
-        fclose($fp);
-        header("location: admin.php#input");
-    } elseif(isset($_POST["date"])) {
-        $pieces = explode("-", $_POST["date"]);
-        $restPiece = explode(" ", $pieces[2]);
-        $timePiece = explode(":", $restPiece[1]);
-        // echo $pieces[0] . "a" . $pieces[1] . "a" . $restPiece[0] . "a" . $timePiece[0] . "a" . $timePiece[1] . "a" . $timePiece[2] . "a";
-        if(is_numeric($pieces[0]) && is_numeric($pieces[1]) && is_numeric($restPiece[0]) && is_numeric($timePiece[0]) && is_numeric($timePiece[1]) && is_numeric($timePiece[2])) {
-            $newDate = $pieces[0] . "-" . $pieces[1] . "-" . $restPiece[0] . " " . $timePiece[0] . ":" . $timePiece[1] . ":" . $timePiece[2];
-        } else {
-            $newDate = "";
-        }
+        exit;
+    } elseif(isset($_POST["votes"])) {        
+        setConfig($pdo, ['end_voting' => !$endVoting]);
 
-        $value = $newDate;
-        $fp = fopen('config/timer.txt', 'w');
-        fwrite($fp, $value);
-        fclose($fp);
         header("location: admin.php#input");
-    } elseif(isset($_POST["deleteall"])) {
-        $sqlDel = "update ". SQL_TABLE ." set removed = 1;";
-        $resultDel = mysqli_query($con, $sqlDel);
+        exit;
+    } elseif(isset($_POST["date"])) {
+        setconfig($pdo, ['timer' => $_POST["date"]]);
+
+        header("location: admin.php#input");
+        exit;
+    } elseif(isset($_POST["deleteall"])) { 
+        $sqlDel = "UPDATE `" . SQL_TABLE . "` SET removed = 1";
+
+        try {
+            $stmt = $pdo->exec($sqlDel); 
+        } catch (PDOException $e) {
+            die(json_encode(["text" => "query-fail"]));
+        }
         header("location: admin.php#open-delete-all");
+        exit;
     }
 
 ?>

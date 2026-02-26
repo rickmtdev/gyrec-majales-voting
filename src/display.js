@@ -81,7 +81,7 @@ function displayData() {
         if(displayCounters != response.display_counter) {
             displayCounters = response.display_counter;
 
-            if(displayCounters == 1) {
+            if(displayCounters) {
                 document.querySelector(".chart-area").style.height = "79vh";
                 document.querySelectorAll(".chart-desc").forEach(elem => {
                     elem.style.height = "15vh";
@@ -105,7 +105,7 @@ function displayData() {
                 });
             }
         }
-        if(displayCounters == 0) {
+        if(!displayCounters) {
             if(timerTime != response.timer) {
                 clearInterval(inter);
                 timerTime = response.timer;

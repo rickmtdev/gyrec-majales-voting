@@ -10,8 +10,7 @@ The app is relatively simple and can be run on any PHP7+/MySQL web server/hostin
 
 Minimal setup process:
 - Clone the repository into your web server directory
-- Adjust the configuration in `setup.php`
-- If needed, adjust the permissions of the `config` directory so that the web server user can read and write into it
+- Adjust the configuration in `env.php` (or create a copy named `env.local.php`)
 - Read the usage manual and get used to the UI
 
 ## PHP setup script
